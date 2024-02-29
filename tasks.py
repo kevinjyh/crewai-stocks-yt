@@ -5,41 +5,40 @@ from pydantic import BaseModel
 
 class MarkdownReportCreationTasks:
     def __tip_section(self):
-        return "If you do your BEST WORK and return exactly what I ask, I'll give you a $10,000 commission!"
+        return "如果你做出你的最好成果並且完全按照我所要求的回報，我將給你一萬美元的佣金！"
 
     def parse_input(self, agent, data: str):
         return Task(
                description=dedent(f"""
-            **Task**: Extract relevant data from string.
-            **Description**: Take the input string and get the company
-            symbol out of it and also any metrics that are available.
+            **任務**：從字串中提取相關數據。
+            **描述**：從輸入字串中獲取公司符號，並獲取任何可用的指標，除專用名詞或縮寫外，其餘盡量使用繁體中文。
 
-            **Parameters**: 
-            - data: {data}
+            **參數**： 
+            - 數據: {data}
 
-            **Notes**
+            **備註**
             {self.__tip_section()}
             """
         ),
             agent=agent,
-            expected_output="""A list of dictionaries containing the symbol and metric.
-            Example output: `[{'symbol': 'MSTR', 'metric': 'cogs'}, {'symbol': 'MSTR', 'metric': 'fcf'}]`"""
+            expected_output="""一個包含符號和指標的字典列表。
+            範例輸出：`[{'symbol': 'MSTR', 'metric': 'cogs'}, {'symbol': 'MSTR', 'metric': 'fcf'}]`"""
         )
 
     def get_data_from_api(self, agent, context):
         return Task(
                description=dedent(f"""
-            **Description**: For each metric, look up the metric for the symbol provided by using the tool.
+            **描述**：對於每個指標，使用工具查找由符號提供的指標，除專用名詞或縮寫外，其餘盡量使用繁體中文。
 
-            **Notes**
-            You MUST use QuickFS to get data for EVERY metric that the client requests. You may have to complete this task multiple times.
+            **備註**
+            你必須使用 QuickFS 獲取客戶請求的每個指標的數據。你可能需要多次完成此任務。
             {self.__tip_section()}
             """
         ),
             agent=agent,
             context=context,
-            expected_output="""A list of metrics and the data retrieved for each one. 
-            Example output: [
+            expected_output="""一個包含每個指標及其檢索到的數據的列表。
+            範例輸出：[
                 {metric:'fcf', data: [...data_points],
                 {metric:'cogs', data: [...data_points],
                 {...}
@@ -49,15 +48,15 @@ class MarkdownReportCreationTasks:
     def create_charts(self, agent, context) -> Task:
         return Task(
             description=dedent(f"""
-                Create graphics of the data representing financial metrics of a company.  DO NOT change the metric name when you create the title of the chart.
+                創建代表公司財務指標的數據圖表。創建圖表的標題時，不要更改指標名稱，除專用名詞或縮寫外，其餘盡量使用繁體中文。
 
                 {self.__tip_section()}
             """),
             agent=agent,
             context=context,
             expected_output="""
-                A list of the file locations of the created charts.
-                Example output: [fcf_chart.png, cogs_chart.png]
+                創建的圖表的檔案位置列表。
+                範例輸出：[fcf_chart.png, cogs_chart.png]
                 """
         )
 
@@ -65,19 +64,19 @@ class MarkdownReportCreationTasks:
     def write_markdown(self, agent, context):
         return Task(
             description=dedent(f"""
-                **Task**: Insert markdown syntax to md file
-                **Description**: Take the input file location and insert it into a markdown file.
-                For Example: writes ![](fcf_chart.png) to markdown file.
+                **任務**：將 markdown 語法插入 md 檔案
+                **描述**：取得輸入的檔案位置並將其插入到 markdown 檔案中，除專用名詞或縮寫外，其餘盡量使用繁體中文。
+                例如：將 ![](fcf_chart.png) 寫入到 markdown 檔案。
 
-                YOU MUST USE MARKDOWN SYNTAX AT ALL TIMES.
+                你必須始終使用 MARKDOWN 語法。
 
-                **Notes**
+                **備註**
                 {self.__tip_section()}
             """
         ),
             agent=agent,
-            expected_output="""A report.md file formatted in markdown syntax. 
-            Example output: 
+            expected_output="""一個以 markdown 語法格式化的 report.md 檔案。
+            範例輸出： 
                 ![](./COGS_chart.png)\n
                 ![](./FCF_chart.png)
                 """,

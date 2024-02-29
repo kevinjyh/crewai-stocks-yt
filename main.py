@@ -3,6 +3,7 @@ from crewai import Agent, Task, Crew, Process
 from textwrap import dedent
 from agents import FinancialResearchAgents
 from tasks import MarkdownReportCreationTasks
+# from file_io import save_markdown, setup_logging
 
 class FinancialCrew:
     def __init__(self, data):
@@ -44,9 +45,10 @@ class FinancialCrew:
 
 
 if __name__ == "__main__":
+    # setup_logging()
     print("## Welcome to Report Creator Crew")
     print("-------------------------------")
-    data = input(dedent("""Enter company symbol followed by the metrics you want to add to the markdown file report:\n>> """))
+    data = "I want fcf for symbol TSLA" # input(dedent("""請輸入公司代碼，然後輸入你想要添加到 markdown 文件報告的指標：\n>> """))
 
     mycrew = FinancialCrew(data)
     result = mycrew.run()
